@@ -1,17 +1,15 @@
-package com.dailycodework.beautifulcare.dto.response;
+package com.dailycodework.beautifulcare.dto.request;
 
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class APIResponse <T>{
-     int code = 1000;
-     String message;
-     T result;
-
+/**
+ * @deprecated This class is deprecated and will be removed in a future release.
+ *             Use
+ *             {@link com.dailycodework.beautifulcare.dto.response.APIResponse}
+ *             instead.
+ */
+@Deprecated
+public class APIResponse<T> {
+     /**
+      * This class is deprecated.
+      * Use {@link com.dailycodework.beautifulcare.dto.response.APIResponse} instead.
+      */
 }
