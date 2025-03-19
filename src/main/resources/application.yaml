@@ -1,0 +1,10 @@
+spring.application.name=beautiful-care
+
+#Database
+spring.datasource.url=jdbc:mysql://localhost:3306/skincarebeauti
+spring.datasource.username=root
+spring.datasource.password=root
+spring.jpa.hibernate.ddl-auto=update
+spring.thymeleaf.cache=false
+#JWT
+
