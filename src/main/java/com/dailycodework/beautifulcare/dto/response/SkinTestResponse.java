@@ -10,9 +10,13 @@ import java.util.List;
 @Builder
 public class SkinTestResponse {
     private String id;
-    private String name;
-    private String description;
-    private boolean active;
-    private List<SkinTestQuestionResponse> questions;
+    private String userId;
+    private String skinType;
+    private String skinCondition;
+    private List<String> allergies;
+    private List<String> medications;
+    private String notes;
+    private LocalDateTime testDate;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

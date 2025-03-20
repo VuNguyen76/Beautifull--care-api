@@ -1,11 +1,11 @@
 package com.dailycodework.beautifulcare.dto.response;
 
-import com.dailycodework.beautifulcare.entity.SkinType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,12 +16,11 @@ public class ServiceResponse {
     private String id;
     private String name;
     private String description;
-    private double price;
-    private int durationMinutes;
-    private String imageUrl;
+    private BigDecimal price;
+    private Integer durationMinutes;
     private String categoryId;
     private String categoryName;
-    private SkinType suitableForSkinType;
+    private String imageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

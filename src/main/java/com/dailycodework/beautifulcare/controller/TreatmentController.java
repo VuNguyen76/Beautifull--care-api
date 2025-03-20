@@ -3,13 +3,15 @@ package com.dailycodework.beautifulcare.controller;
 import com.dailycodework.beautifulcare.dto.request.TreatmentCreateRequest;
 import com.dailycodework.beautifulcare.dto.request.TreatmentResultRequest;
 import com.dailycodework.beautifulcare.dto.request.TreatmentUpdateRequest;
-import com.dailycodework.beautifulcare.dto.response.APIResponse;
+import com.dailycodework.beautifulcare.dto.response.ApiResponse;
 import com.dailycodework.beautifulcare.dto.response.TreatmentResponse;
 import com.dailycodework.beautifulcare.dto.response.TreatmentResultResponse;
 import com.dailycodework.beautifulcare.service.TreatmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/treatments")
 @RequiredArgsConstructor
+@Slf4j
 public class TreatmentController {
     private final TreatmentService treatmentService;
 
@@ -32,10 +35,12 @@ public class TreatmentController {
      * @return TreatmentResponse with created treatment details
      */
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public APIResponse<TreatmentResponse> createTreatment(@Valid @RequestBody TreatmentCreateRequest request) {
+    public ResponseEntity<ApiResponse<TreatmentResponse>> createTreatment(
+            @Valid @RequestBody TreatmentCreateRequest request) {
+        log.info("REST request to create a new treatment");
         TreatmentResponse treatment = treatmentService.createTreatment(request);
-        return new APIResponse<>(true, "Treatment created successfully", treatment);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success("Treatment created successfully", treatment));
     }
 
     /**
@@ -46,11 +51,12 @@ public class TreatmentController {
      * @return List of treatment responses
      */
     @GetMapping
-    public APIResponse<List<TreatmentResponse>> getAllTreatments(
+    public ResponseEntity<ApiResponse<List<TreatmentResponse>>> getAllTreatments(
             @RequestParam(required = false) String bookingId,
             @RequestParam(required = false) String specialistId) {
+        log.info("REST request to get all treatments with bookingId: {} and specialistId: {}", bookingId, specialistId);
         List<TreatmentResponse> treatments = treatmentService.getAllTreatments(bookingId, specialistId);
-        return new APIResponse<>(true, "Treatments retrieved successfully", treatments);
+        return ResponseEntity.ok(ApiResponse.success("Treatments retrieved successfully", treatments));
     }
 
     /**
@@ -60,9 +66,10 @@ public class TreatmentController {
      * @return Treatment details
      */
     @GetMapping("/{id}")
-    public APIResponse<TreatmentResponse> getTreatmentById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<TreatmentResponse>> getTreatmentById(@PathVariable String id) {
+        log.info("REST request to get treatment by id: {}", id);
         TreatmentResponse treatment = treatmentService.getTreatmentById(id);
-        return new APIResponse<>(true, "Treatment retrieved successfully", treatment);
+        return ResponseEntity.ok(ApiResponse.success("Treatment retrieved successfully", treatment));
     }
 
     /**
@@ -73,10 +80,11 @@ public class TreatmentController {
      * @return Updated treatment details
      */
     @PutMapping("/{id}")
-    public APIResponse<TreatmentResponse> updateTreatment(
+    public ResponseEntity<ApiResponse<TreatmentResponse>> updateTreatment(
             @PathVariable String id, @Valid @RequestBody TreatmentUpdateRequest request) {
+        log.info("REST request to update treatment with id: {}", id);
         TreatmentResponse updatedTreatment = treatmentService.updateTreatment(id, request);
-        return new APIResponse<>(true, "Treatment updated successfully", updatedTreatment);
+        return ResponseEntity.ok(ApiResponse.success("Treatment updated successfully", updatedTreatment));
     }
 
     /**
@@ -86,9 +94,10 @@ public class TreatmentController {
      * @return Updated treatment details
      */
     @PutMapping("/{id}/start")
-    public APIResponse<TreatmentResponse> startTreatment(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<TreatmentResponse>> startTreatment(@PathVariable String id) {
+        log.info("REST request to start treatment with id: {}", id);
         TreatmentResponse updatedTreatment = treatmentService.startTreatment(id);
-        return new APIResponse<>(true, "Treatment started successfully", updatedTreatment);
+        return ResponseEntity.ok(ApiResponse.success("Treatment started successfully", updatedTreatment));
     }
 
     /**
@@ -98,9 +107,10 @@ public class TreatmentController {
      * @return Updated treatment details
      */
     @PutMapping("/{id}/complete")
-    public APIResponse<TreatmentResponse> completeTreatment(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<TreatmentResponse>> completeTreatment(@PathVariable String id) {
+        log.info("REST request to complete treatment with id: {}", id);
         TreatmentResponse updatedTreatment = treatmentService.completeTreatment(id);
-        return new APIResponse<>(true, "Treatment completed successfully", updatedTreatment);
+        return ResponseEntity.ok(ApiResponse.success("Treatment completed successfully", updatedTreatment));
     }
 
     /**
@@ -111,11 +121,12 @@ public class TreatmentController {
      * @return Treatment result details
      */
     @PostMapping("/{id}/results")
-    @ResponseStatus(HttpStatus.CREATED)
-    public APIResponse<TreatmentResultResponse> addTreatmentResult(
+    public ResponseEntity<ApiResponse<TreatmentResultResponse>> addTreatmentResult(
             @PathVariable String id, @Valid @RequestBody TreatmentResultRequest request) {
+        log.info("REST request to add treatment result for treatment with id: {}", id);
         TreatmentResultResponse result = treatmentService.addTreatmentResult(id, request);
-        return new APIResponse<>(true, "Treatment result added successfully", result);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success("Treatment result added successfully", result));
     }
 
     /**
@@ -125,8 +136,9 @@ public class TreatmentController {
      * @return Treatment result details
      */
     @GetMapping("/{id}/results")
-    public APIResponse<TreatmentResultResponse> getTreatmentResult(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<TreatmentResultResponse>> getTreatmentResult(@PathVariable String id) {
+        log.info("REST request to get treatment result for treatment with id: {}", id);
         TreatmentResultResponse result = treatmentService.getTreatmentResult(id);
-        return new APIResponse<>(true, "Treatment result retrieved successfully", result);
+        return ResponseEntity.ok(ApiResponse.success("Treatment result retrieved successfully", result));
     }
 }

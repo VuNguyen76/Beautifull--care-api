@@ -6,6 +6,7 @@ import com.dailycodework.beautifulcare.dto.response.ServiceRecommendationRespons
 import com.dailycodework.beautifulcare.dto.response.SkinTestResponse;
 import com.dailycodework.beautifulcare.dto.response.SkinTestResultResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -36,6 +37,49 @@ public interface SkinTestService {
      * @return SkinTestResponse with skin test details
      */
     SkinTestResponse getSkinTestById(String id);
+
+    /**
+     * Get skin tests by user ID
+     * 
+     * @param userId User ID
+     * @return List of skin test responses
+     */
+    List<SkinTestResponse> getSkinTestsByUserId(String userId);
+
+    /**
+     * Get latest skin test by user ID
+     * 
+     * @param userId User ID
+     * @return SkinTestResponse with skin test details
+     */
+    SkinTestResponse getLatestSkinTestByUserId(String userId);
+
+    /**
+     * Get skin tests by user ID and date range
+     * 
+     * @param userId    User ID
+     * @param startDate Start date
+     * @param endDate   End date
+     * @return List of skin test responses
+     */
+    List<SkinTestResponse> getSkinTestsByUserIdAndDateRange(String userId, LocalDateTime startDate,
+            LocalDateTime endDate);
+
+    /**
+     * Update skin test
+     * 
+     * @param id      Skin test ID
+     * @param request Update request
+     * @return Updated skin test response
+     */
+    SkinTestResponse updateSkinTest(String id, SkinTestCreateRequest request);
+
+    /**
+     * Delete skin test
+     * 
+     * @param id Skin test ID
+     */
+    void deleteSkinTest(String id);
 
     /**
      * Save skin test result

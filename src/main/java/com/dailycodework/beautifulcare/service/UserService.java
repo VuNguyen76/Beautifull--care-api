@@ -4,6 +4,7 @@ import com.dailycodework.beautifulcare.dto.request.UserCreateRequest;
 import com.dailycodework.beautifulcare.dto.request.UserUpdateRequest;
 import com.dailycodework.beautifulcare.dto.response.UserResponse;
 import com.dailycodework.beautifulcare.entity.User;
+import com.dailycodework.beautifulcare.entity.UserRole;
 import com.dailycodework.beautifulcare.exception.AppException;
 import com.dailycodework.beautifulcare.exception.ErrorCode;
 import com.dailycodework.beautifulcare.mapper.UserMapper;
@@ -26,16 +27,17 @@ public class UserService {
     @Transactional
     public UserResponse createUser(UserCreateRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new AppException(ErrorCode.USER_EXISTED);
+            throw new AppException(ErrorCode.USER_ALREADY_EXISTS);
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
+            throw new AppException(ErrorCode.USER_EMAIL_EXISTS);
         }
 
         User newUser = userMapper.toUser(request);
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setActive(true);
+        newUser.setRole(UserRole.CUSTOMER);
 
         User savedUser = userRepository.save(newUser);
         return userMapper.toUserResponse(savedUser);
@@ -63,7 +65,7 @@ public class UserService {
             // Kiểm tra trùng email nếu email mới khác email hiện tại
             if (!request.getEmail().equals(user.getEmail()) &&
                     userRepository.existsByEmail(request.getEmail())) {
-                throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
+                throw new AppException(ErrorCode.USER_EMAIL_EXISTS);
             }
             user.setEmail(request.getEmail());
         }

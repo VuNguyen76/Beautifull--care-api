@@ -1,6 +1,7 @@
 package com.dailycodework.beautifulcare.dto.request;
 
 import com.dailycodework.beautifulcare.entity.SkinType;
+import com.dailycodework.beautifulcare.entity.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -9,6 +10,16 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * DTO class for customer creation requests.
+ * This class contains all fields needed to create a new customer account.
+ * The role field is optional and allows administrators to specify a role other
+ * than CUSTOMER.
+ * 
+ * @author Beautiful Care API Team
+ * @version 1.1
+ * @since 2025-03-21
+ */
 @Data
 public class CustomerCreateRequest {
     @NotBlank(message = "Username is required")
@@ -35,4 +46,10 @@ public class CustomerCreateRequest {
     private LocalDate dob;
     private String address;
     private SkinType skinType;
+
+    /**
+     * Optional role field that can be set by administrators.
+     * If not provided, the default CUSTOMER role will be assigned.
+     */
+    private UserRole role;
 }

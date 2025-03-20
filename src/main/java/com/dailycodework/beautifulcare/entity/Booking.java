@@ -23,6 +23,10 @@ public class Booking {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "specialist_id")
+    private Specialist specialist;
+
     private LocalDateTime bookingTime;
     private String note;
 
