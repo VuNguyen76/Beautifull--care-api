@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class ServiceCategoryCreateRequest {
-    @NotBlank(message = "Category name is required")
+    @NotBlank(message = "Name is required")
     private String name;
 
     private String description;

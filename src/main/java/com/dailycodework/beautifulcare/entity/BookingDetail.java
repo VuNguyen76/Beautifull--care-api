@@ -23,7 +23,7 @@ public class BookingDetail {
 
     @ManyToOne
     @JoinColumn(name = "service_id")
-    private ServiceEntity service;
+    private Service service;
 
     private double price;
     private int quantity = 1;

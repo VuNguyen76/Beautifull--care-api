@@ -1,24 +1,38 @@
 package com.dailycodework.beautifulcare.mapper;
 
+import com.dailycodework.beautifulcare.dto.request.ServiceCategoryCreateRequest;
+import com.dailycodework.beautifulcare.dto.request.ServiceCategoryUpdateRequest;
 import com.dailycodework.beautifulcare.dto.response.ServiceCategoryResponse;
 import com.dailycodework.beautifulcare.entity.ServiceCategory;
-import org.springframework.stereotype.Component;
 
-@Component
-public class ServiceCategoryMapper {
+/**
+ * Mapper interface for ServiceCategory entity.
+ * Implementation is provided by ServiceCategoryMapperImpl.
+ */
+public interface ServiceCategoryMapper {
 
-    public ServiceCategoryResponse toServiceCategoryResponse(ServiceCategory serviceCategory) {
-        if (serviceCategory == null) {
-            return null;
-        }
+    /**
+     * Maps a ServiceCategoryCreateRequest DTO to a ServiceCategory entity.
+     *
+     * @param request the service category create request DTO
+     * @return the mapped service category entity
+     */
+    ServiceCategory toEntity(ServiceCategoryCreateRequest request);
 
-        return ServiceCategoryResponse.builder()
-                .id(serviceCategory.getId())
-                .name(serviceCategory.getName())
-                .description(serviceCategory.getDescription())
-                .imageUrl(serviceCategory.getImageUrl())
-                .createdAt(serviceCategory.getCreatedAt())
-                .updatedAt(serviceCategory.getUpdatedAt())
-                .build();
-    }
+    /**
+     * Maps a ServiceCategory entity to a ServiceCategoryResponse DTO.
+     *
+     * @param category the service category entity to map
+     * @return the mapped service category response DTO
+     */
+    ServiceCategoryResponse toResponse(ServiceCategory category);
+
+    /**
+     * Updates a ServiceCategory entity with values from a
+     * ServiceCategoryUpdateRequest DTO.
+     *
+     * @param category the service category entity to update
+     * @param request  the service category update request DTO
+     */
+    void updateEntity(ServiceCategory category, ServiceCategoryUpdateRequest request);
 }

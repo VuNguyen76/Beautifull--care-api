@@ -32,10 +32,13 @@ public class Blog {
     private User author;
 
     @CreatedDate
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "published_at")
     private LocalDateTime publishedAt;
 }

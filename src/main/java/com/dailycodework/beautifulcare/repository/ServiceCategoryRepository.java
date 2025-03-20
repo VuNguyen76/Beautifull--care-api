@@ -12,4 +12,6 @@ public interface ServiceCategoryRepository extends JpaRepository<ServiceCategory
     Optional<ServiceCategory> findByName(String name);
 
     List<ServiceCategory> findByNameContainingIgnoreCase(String name);
+
+    boolean existsByName(String name);
 }

@@ -5,7 +5,9 @@ import com.dailycodework.beautifulcare.dto.request.TreatmentResultRequest;
 import com.dailycodework.beautifulcare.dto.request.TreatmentUpdateRequest;
 import com.dailycodework.beautifulcare.dto.response.TreatmentResponse;
 import com.dailycodework.beautifulcare.dto.response.TreatmentResultResponse;
+import com.dailycodework.beautifulcare.entity.enums.TreatmentStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -78,4 +80,21 @@ public interface TreatmentService {
      * @return Treatment result details
      */
     TreatmentResultResponse getTreatmentResult(String id);
+
+    List<TreatmentResponse> getTreatmentsByBookingId(String bookingId);
+
+    List<TreatmentResponse> getTreatmentsBySpecialistId(String specialistId);
+
+    List<TreatmentResponse> getTreatmentsByStatus(TreatmentStatus status);
+
+    List<TreatmentResponse> getTreatmentsByDateRange(LocalDateTime startTime, LocalDateTime endTime);
+
+    List<TreatmentResponse> getTreatmentsBySpecialistIdAndDateRange(String specialistId, LocalDateTime startTime,
+            LocalDateTime endTime);
+
+    TreatmentResponse getLatestTreatmentByBookingId(String bookingId);
+
+    TreatmentResponse cancelTreatment(String id);
+
+    void deleteTreatment(String id);
 }

@@ -40,6 +40,10 @@ public class AuthenticationService {
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY = "";
 
+    @NonFinal
+    @Value("${jwt.expiration:86400000}")
+    protected long JWT_EXPIRATION = 86400000; // 24 giờ mặc định
+
     public IntrospectResponse introspect(IntrospectRequest request) throws ParseException, JOSEException {
         SignedJWT signedJWT = SignedJWT.parse(request.getToken());
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
@@ -74,6 +78,9 @@ public class AuthenticationService {
             String token = createToken(user);
             return AuthenticationResponse.builder()
                     .token(token)
+                    .userId(user.getId())
+                    .username(user.getUsername())
+                    .role(user.getRole())
                     .build();
         } catch (JOSEException e) {
             throw new RuntimeException(e);
@@ -84,7 +91,7 @@ public class AuthenticationService {
         JWSSigner signer = new MACSigner(SIGNER_KEY.getBytes());
 
         Instant now = Instant.now();
-        Instant expiry = now.plus(1, ChronoUnit.HOURS);
+        Instant expiry = now.plusMillis(JWT_EXPIRATION);
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())

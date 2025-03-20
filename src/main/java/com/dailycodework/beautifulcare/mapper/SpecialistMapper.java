@@ -1,71 +1,35 @@
 package com.dailycodework.beautifulcare.mapper;
 
 import com.dailycodework.beautifulcare.dto.request.SpecialistCreateRequest;
-import com.dailycodework.beautifulcare.dto.response.ServiceResponse;
+import com.dailycodework.beautifulcare.dto.request.SpecialistUpdateRequest;
+import com.dailycodework.beautifulcare.dto.response.SpecialistDetailResponse;
 import com.dailycodework.beautifulcare.dto.response.SpecialistResponse;
-import com.dailycodework.beautifulcare.entity.ServiceEntity;
 import com.dailycodework.beautifulcare.entity.Specialist;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
-import java.util.stream.Collectors;
+@Mapper(componentModel = "spring", uses = { ServiceMapper.class })
+public interface SpecialistMapper {
 
-@Component
-public class SpecialistMapper {
+    @Mapping(target = "user.password", ignore = true)
+    Specialist toSpecialist(SpecialistCreateRequest request);
 
-    public Specialist toSpecialist(SpecialistCreateRequest request) {
-        Specialist specialist = new Specialist();
-        specialist.setBio(request.getBio());
-        specialist.setExpertise(request.getExpertise());
-        specialist.setYearsOfExperience(request.getYearsOfExperience());
-        specialist.setCertifications(request.getCertifications());
-        return specialist;
-    }
+    @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "email", source = "user.email")
+    @Mapping(target = "firstName", source = "user.firstName")
+    @Mapping(target = "lastName", source = "user.lastName")
+    @Mapping(target = "active", source = "user.active")
+    SpecialistResponse toSpecialistResponse(Specialist specialist);
 
-    public SpecialistResponse toSpecialistResponse(Specialist specialist) {
-        SpecialistResponse response = new SpecialistResponse();
-        response.setId(specialist.getId());
-        response.setUsername(specialist.getUsername());
-        response.setEmail(specialist.getEmail());
-        response.setPhone(specialist.getPhone());
-        response.setFirstName(specialist.getFirstName());
-        response.setLastName(specialist.getLastName());
-        response.setDob(specialist.getDob());
-        response.setAvatar(specialist.getAvatar());
-        response.setRole(specialist.getRole());
-        response.setActive(specialist.isActive());
-        response.setCreatedAt(specialist.getCreatedAt());
-        response.setBio(specialist.getBio());
-        response.setExpertise(specialist.getExpertise());
-        response.setYearsOfExperience(specialist.getYearsOfExperience());
-        response.setCertifications(specialist.getCertifications());
+    @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "email", source = "user.email")
+    @Mapping(target = "firstName", source = "user.firstName")
+    @Mapping(target = "lastName", source = "user.lastName")
+    @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "active", source = "user.active")
+    @Mapping(target = "services", source = "services")
+    SpecialistDetailResponse toDetailResponse(Specialist specialist);
 
-        // Map services
-        response.setServices(specialist.getServices().stream()
-                .map(this::toServiceResponse)
-                .collect(Collectors.toSet()));
-
-        return response;
-    }
-
-    private ServiceResponse toServiceResponse(ServiceEntity service) {
-        return ServiceResponse.builder()
-                .id(service.getId())
-                .name(service.getName())
-                .description(service.getDescription())
-                .price(service.getPrice())
-                .durationMinutes(service.getDurationMinutes())
-                .imageUrl(service.getImageUrl())
-                .categoryId(service.getCategory().getId())
-                .categoryName(service.getCategory().getName())
-                .createdAt(service.getCreatedAt())
-                .updatedAt(service.getUpdatedAt())
-                .build();
-    }
-
-    public void updateSpecialist(Specialist specialist, SpecialistCreateRequest request) {
-        specialist.setBio(request.getBio());
-        specialist.setExpertise(request.getExpertise());
-        specialist.setYearsOfExperience(request.getYearsOfExperience());
-        specialist.setCertifications(request.getCertifications());
-    }
+    void updateSpecialistFromRequest(SpecialistUpdateRequest request, @MappingTarget Specialist specialist);
 }

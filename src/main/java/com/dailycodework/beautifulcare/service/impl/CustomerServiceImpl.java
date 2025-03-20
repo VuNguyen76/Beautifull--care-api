@@ -37,7 +37,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public CustomerResponse createCustomer(CustomerCreateRequest request) {
         if (customerRepository.existsByEmail(request.getEmail())) {
-            throw new AppException(ErrorCode.EMAIL_ALREADY_EXISTS);
+            throw new AppException(ErrorCode.USER_EMAIL_EXISTS);
         }
 
         Customer customer = customerMapper.toCustomer(request);
@@ -102,6 +102,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     private Customer findCustomerById(String id) {
         return customerRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CUSTOMER_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 }

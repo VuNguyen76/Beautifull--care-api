@@ -33,11 +33,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingResponse createBooking(BookingCreateRequest request) {
-        // Tìm khách hàng
+        // Find customer
         Customer customer = customerRepository.findById(request.getCustomerId())
-                .orElseThrow(() -> new AppException(ErrorCode.CUSTOMER_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        // Tạo booking mới
+        // Create new booking
         Booking booking = new Booking();
         booking.setCustomer(customer);
         booking.setBookingTime(request.getBookingTime());
@@ -45,10 +45,10 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(BookingStatus.PENDING);
         booking.setCreatedAt(LocalDateTime.now());
 
-        // Lưu booking
+        // Save booking
         Booking savedBooking = bookingRepository.save(booking);
 
-        // Chuyển đổi sang response
+        // Convert to response
         return mapToBookingResponse(savedBooking);
     }
 
@@ -77,7 +77,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingResponse updateBooking(String id, BookingUpdateRequest request) {
         Booking booking = findBookingById(id);
 
-        // Cập nhật thông tin
+        // Update information
         if (request.getBookingTime() != null) {
             booking.setBookingTime(request.getBookingTime());
         }
@@ -98,10 +98,10 @@ public class BookingServiceImpl implements BookingService {
     public void cancelBooking(String id) {
         Booking booking = findBookingById(id);
 
-        // Kiểm tra xem booking có thể hủy không
+        // Check if booking can be cancelled
         if (booking.getStatus() == BookingStatus.COMPLETED ||
                 booking.getStatus() == BookingStatus.IN_PROGRESS) {
-            throw new AppException(ErrorCode.INVALID_STATE_TRANSITION);
+            throw new AppException(ErrorCode.BOOKING_CANNOT_BE_CANCELLED);
         }
 
         booking.setStatus(BookingStatus.CANCELLED);
@@ -120,9 +120,9 @@ public class BookingServiceImpl implements BookingService {
     public BookingResponse checkinCustomer(String id) {
         Booking booking = findBookingById(id);
 
-        // Kiểm tra trạng thái booking
+        // Check booking status
         if (booking.getStatus() != BookingStatus.PENDING) {
-            throw new AppException(ErrorCode.INVALID_STATE_TRANSITION);
+            throw new AppException(ErrorCode.BOOKING_INVALID_STATUS);
         }
 
         booking.setStatus(BookingStatus.CHECKED_IN);
@@ -136,11 +136,11 @@ public class BookingServiceImpl implements BookingService {
     public BookingResponse assignSpecialist(String id, SpecialistAssignmentRequest request) {
         Booking booking = findBookingById(id);
 
-        // Tìm specialist
+        // Find specialist
         Specialist specialist = specialistRepository.findById(request.getSpecialistId())
                 .orElseThrow(() -> new AppException(ErrorCode.SPECIALIST_NOT_FOUND));
 
-        // TODO: Triển khai logic phân công specialist vào booking detail
+        // TODO: Implement specialist assignment logic in booking detail
 
         return mapToBookingResponse(booking);
     }
@@ -149,9 +149,9 @@ public class BookingServiceImpl implements BookingService {
     public BookingResponse checkoutCustomer(String id) {
         Booking booking = findBookingById(id);
 
-        // Kiểm tra trạng thái booking
+        // Check booking status
         if (booking.getStatus() != BookingStatus.IN_PROGRESS) {
-            throw new AppException(ErrorCode.INVALID_STATE_TRANSITION);
+            throw new AppException(ErrorCode.BOOKING_INVALID_STATUS);
         }
 
         booking.setStatus(BookingStatus.COMPLETED);
@@ -168,7 +168,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private BookingResponse mapToBookingResponse(Booking booking) {
-        // Map đối tượng Booking sang BookingResponse
+        // Map Booking object to BookingResponse
         return BookingResponse.builder()
                 .id(booking.getId())
                 .customerId(booking.getCustomer().getId())
@@ -179,7 +179,7 @@ public class BookingServiceImpl implements BookingService {
                 .checkinTime(booking.getCheckinTime())
                 .checkoutTime(booking.getCheckoutTime())
                 .createdAt(booking.getCreatedAt())
-                // TODO: Map các trường khác khi cần
+                // TODO: Map other fields when needed
                 .build();
     }
 }

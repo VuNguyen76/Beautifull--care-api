@@ -19,4 +19,6 @@ public interface SkinTestResultRepository extends JpaRepository<SkinTestResult, 
     List<SkinTestResult> findByCustomerIdOrderByCreatedAtDesc(String customerId);
 
     List<SkinTestResult> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+
+    List<SkinTestResult> findBySkinTestUserId(String userId);
 }

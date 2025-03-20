@@ -1,13 +1,16 @@
 package com.dailycodework.beautifulcare.controller;
 
 import com.dailycodework.beautifulcare.dto.request.SpecialistCreateRequest;
-import com.dailycodework.beautifulcare.dto.response.APIResponse;
+import com.dailycodework.beautifulcare.dto.request.SpecialistUpdateRequest;
+import com.dailycodework.beautifulcare.dto.response.ApiResponse;
 import com.dailycodework.beautifulcare.dto.response.SpecialistResponse;
 import com.dailycodework.beautifulcare.dto.response.WorkScheduleResponse;
 import com.dailycodework.beautifulcare.service.SpecialistService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,52 +18,76 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/specialists")
 @RequiredArgsConstructor
+@Slf4j
 public class SpecialistController {
     private final SpecialistService specialistService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public APIResponse<SpecialistResponse> createSpecialist(@Valid @RequestBody SpecialistCreateRequest request) {
+    public ResponseEntity<ApiResponse<SpecialistResponse>> createSpecialist(
+            @Valid @RequestBody SpecialistCreateRequest request) {
+        log.info("REST request to create a new specialist");
         SpecialistResponse response = specialistService.createSpecialist(request);
-        return new APIResponse<>(true, "Specialist created successfully", response);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success("Specialist created successfully", response));
     }
 
     @GetMapping
-    public APIResponse<List<SpecialistResponse>> getAllSpecialists() {
+    public ResponseEntity<ApiResponse<List<SpecialistResponse>>> getAllSpecialists() {
+        log.info("REST request to get all specialists");
         List<SpecialistResponse> specialists = specialistService.getAllSpecialists();
-        return new APIResponse<>(true, "Specialists retrieved successfully", specialists);
+        return ResponseEntity.ok(ApiResponse.success("Specialists retrieved successfully", specialists));
     }
 
     @GetMapping("/{id}")
-    public APIResponse<SpecialistResponse> getSpecialistById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<SpecialistResponse>> getSpecialistById(@PathVariable String id) {
+        log.info("REST request to get specialist by id: {}", id);
         SpecialistResponse specialist = specialistService.getSpecialistById(id);
-        return new APIResponse<>(true, "Specialist retrieved successfully", specialist);
+        return ResponseEntity.ok(ApiResponse.success("Specialist retrieved successfully", specialist));
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ApiResponse<SpecialistResponse>> getSpecialistByUserId(@PathVariable String userId) {
+        log.info("REST request to get specialist by user id: {}", userId);
+        SpecialistResponse specialist = specialistService.getSpecialistByUserId(userId);
+        return ResponseEntity.ok(ApiResponse.success("Specialist retrieved successfully", specialist));
+    }
+
+    @GetMapping("/specialization/{specialization}")
+    public ResponseEntity<ApiResponse<List<SpecialistResponse>>> getSpecialistsBySpecialization(
+            @PathVariable String specialization) {
+        log.info("REST request to get specialists by specialization: {}", specialization);
+        List<SpecialistResponse> specialists = specialistService.getSpecialistsBySpecialization(specialization);
+        return ResponseEntity.ok(ApiResponse.success("Specialists retrieved successfully", specialists));
     }
 
     @PutMapping("/{id}")
-    public APIResponse<SpecialistResponse> updateSpecialist(
+    public ResponseEntity<ApiResponse<SpecialistResponse>> updateSpecialist(
             @PathVariable String id,
-            @Valid @RequestBody SpecialistCreateRequest request) {
+            @Valid @RequestBody SpecialistUpdateRequest request) {
+        log.info("REST request to update specialist with id: {}", id);
         SpecialistResponse updatedSpecialist = specialistService.updateSpecialist(id, request);
-        return new APIResponse<>(true, "Specialist updated successfully", updatedSpecialist);
+        return ResponseEntity.ok(ApiResponse.success("Specialist updated successfully", updatedSpecialist));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public APIResponse<Void> deleteSpecialist(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Void>> deleteSpecialist(@PathVariable String id) {
+        log.info("REST request to delete specialist with id: {}", id);
         specialistService.deleteSpecialist(id);
-        return new APIResponse<>(true, "Specialist deleted successfully", null);
+        return ResponseEntity.ok(ApiResponse.success("Specialist deleted successfully", null));
     }
 
     @GetMapping("/{id}/schedule")
-    public APIResponse<List<WorkScheduleResponse>> getSpecialistSchedule(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<List<WorkScheduleResponse>>> getSpecialistSchedule(@PathVariable String id) {
+        log.info("REST request to get schedule for specialist with id: {}", id);
         List<WorkScheduleResponse> schedule = specialistService.getSpecialistSchedule(id);
-        return new APIResponse<>(true, "Specialist schedule retrieved successfully", schedule);
+        return ResponseEntity.ok(ApiResponse.success("Specialist schedule retrieved successfully", schedule));
     }
 
     @GetMapping("/service/{serviceId}")
-    public APIResponse<List<SpecialistResponse>> getSpecialistsByService(@PathVariable String serviceId) {
+    public ResponseEntity<ApiResponse<List<SpecialistResponse>>> getSpecialistsByService(
+            @PathVariable String serviceId) {
+        log.info("REST request to get specialists by service id: {}", serviceId);
         List<SpecialistResponse> specialists = specialistService.getSpecialistsByService(serviceId);
-        return new APIResponse<>(true, "Specialists for service retrieved successfully", specialists);
+        return ResponseEntity.ok(ApiResponse.success("Specialists for service retrieved successfully", specialists));
     }
 }

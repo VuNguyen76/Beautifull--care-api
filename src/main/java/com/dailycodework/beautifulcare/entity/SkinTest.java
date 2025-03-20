@@ -2,36 +2,68 @@ package com.dailycodework.beautifulcare.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
 @Data
-@Table(name = "skin_tests")
-@EntityListeners(AuditingEntityListener.class)
+@SuperBuilder
+@NoArgsConstructor
+@Entity
+@Table(name = "skin_test")
 public class SkinTest {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator = "custom-id")
+    @GenericGenerator(name = "custom-id", strategy = "com.dailycodework.beautifulcare.config.CustomIdGenerator")
     private String id;
 
-    private String name;
-    private String description;
-    private boolean active = true;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @OneToMany(mappedBy = "skinTest", cascade = CascadeType.ALL)
-    private List<SkinTestQuestion> questions = new ArrayList<>();
+    @Column(nullable = false)
+    private String skinType;
 
-    @OneToMany(mappedBy = "skinTest")
-    private List<SkinTestResult> results = new ArrayList<>();
+    @Column(nullable = false)
+    private String skinCondition;
 
-    @CreatedDate
+    @Column(columnDefinition = "TEXT")
+    private String allergies;
+
+    @Column(columnDefinition = "TEXT")
+    private String medications;
+
+    @Column(columnDefinition = "TEXT")
+    private String notes;
+
+    @Column(name = "test_date")
+    private LocalDateTime testDate;
+
+    @Column(name = "active")
+    private Boolean active = true;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+        if (testDate == null) {
+            testDate = LocalDateTime.now();
+        }
+        if (active == null) {
+            active = true;
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

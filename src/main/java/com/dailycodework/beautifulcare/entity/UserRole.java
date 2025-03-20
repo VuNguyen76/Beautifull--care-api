@@ -4,5 +4,6 @@ public enum UserRole {
     CUSTOMER,
     STAFF,
     SPECIALIST,
-    ADMIN
+    ADMIN,
+    CONTENT_CREATOR
 }

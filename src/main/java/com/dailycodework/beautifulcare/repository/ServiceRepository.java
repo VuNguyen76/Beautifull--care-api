@@ -1,21 +1,23 @@
 package com.dailycodework.beautifulcare.repository;
 
-import com.dailycodework.beautifulcare.entity.ServiceEntity;
-import com.dailycodework.beautifulcare.entity.SkinType;
+import com.dailycodework.beautifulcare.entity.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface ServiceRepository extends JpaRepository<ServiceEntity, String> {
-    List<ServiceEntity> findByCategoryId(String categoryId);
+public interface ServiceRepository extends JpaRepository<Service, String> {
+    List<Service> findByCategoryId(String categoryId);
 
-    List<ServiceEntity> findByNameContainingIgnoreCase(String name);
+    Optional<Service> findByName(String name);
 
-    List<ServiceEntity> findByPriceBetween(double minPrice, double maxPrice);
+    boolean existsByName(String name);
 
-    List<ServiceEntity> findBySpecialistsId(String specialistId);
+    List<Service> findByNameContainingIgnoreCase(String keyword);
 
-    List<ServiceEntity> findBySuitableForSkinType(SkinType skinType);
+    Page<Service> findAll(Pageable pageable);
 }

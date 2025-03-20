@@ -1,48 +1,48 @@
 package com.dailycodework.beautifulcare.mapper;
 
 import com.dailycodework.beautifulcare.dto.request.ServiceCreateRequest;
+import com.dailycodework.beautifulcare.dto.request.ServiceUpdateRequest;
 import com.dailycodework.beautifulcare.dto.response.ServiceResponse;
+import com.dailycodework.beautifulcare.entity.Service;
 import com.dailycodework.beautifulcare.entity.ServiceCategory;
-import com.dailycodework.beautifulcare.entity.ServiceEntity;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Component
-public class ServiceMapper {
-    public ServiceEntity toService(ServiceCreateRequest request, ServiceCategory category) {
-        ServiceEntity service = new ServiceEntity();
-        service.setName(request.getName());
-        service.setDescription(request.getDescription());
-        service.setPrice(request.getPrice());
-        service.setDurationMinutes(request.getDurationMinutes());
-        service.setImageUrl(request.getImageUrl());
-        service.setCategory(category);
-        service.setSuitableForSkinType(request.getSuitableForSkinType());
-        return service;
-    }
+import java.util.List;
 
-    public ServiceResponse toServiceResponse(ServiceEntity service) {
-        return ServiceResponse.builder()
-                .id(service.getId())
-                .name(service.getName())
-                .description(service.getDescription())
-                .price(service.getPrice())
-                .durationMinutes(service.getDurationMinutes())
-                .imageUrl(service.getImageUrl())
-                .categoryId(service.getCategory() != null ? service.getCategory().getId() : null)
-                .categoryName(service.getCategory() != null ? service.getCategory().getName() : null)
-                .suitableForSkinType(service.getSuitableForSkinType())
-                .createdAt(service.getCreatedAt())
-                .updatedAt(service.getUpdatedAt())
-                .build();
-    }
+/**
+ * Mapper interface for Service entity.
+ * Implementation is provided by ServiceMapperImpl.
+ */
+@Mapper(componentModel = "spring")
+public interface ServiceMapper {
 
-    public void updateService(ServiceEntity service, ServiceCreateRequest request, ServiceCategory category) {
-        service.setName(request.getName());
-        service.setDescription(request.getDescription());
-        service.setPrice(request.getPrice());
-        service.setDurationMinutes(request.getDurationMinutes());
-        service.setImageUrl(request.getImageUrl());
-        service.setCategory(category);
-        service.setSuitableForSkinType(request.getSuitableForSkinType());
-    }
+    /**
+     * Maps a Service entity to a ServiceResponse DTO.
+     *
+     * @param service the service entity to map
+     * @return the mapped service response DTO
+     */
+    @Mapping(target = "categoryName", source = "category.name")
+    ServiceResponse toServiceResponse(Service service);
+
+    /**
+     * Maps a ServiceCreateRequest DTO to a Service entity.
+     *
+     * @param request  the service create request DTO
+     * @param category the service category entity
+     * @return the mapped service entity
+     */
+    Service toService(ServiceCreateRequest request, ServiceCategory category);
+
+    /**
+     * Updates a Service entity with values from a ServiceUpdateRequest DTO.
+     *
+     * @param service  the service entity to update
+     * @param request  the service update request DTO
+     * @param category the service category entity
+     */
+    void updateService(Service service, ServiceUpdateRequest request, ServiceCategory category);
+
+    List<ServiceResponse> toServiceResponseList(List<Service> services);
 }
