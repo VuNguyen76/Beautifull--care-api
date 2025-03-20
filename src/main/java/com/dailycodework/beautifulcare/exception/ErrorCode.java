@@ -35,6 +35,11 @@ public enum ErrorCode {
     SKIN_TEST_NOT_FOUND(HttpStatus.NOT_FOUND, "Skin test not found"),
     SKIN_TEST_RESULT_NOT_FOUND(HttpStatus.NOT_FOUND, "Skin test result not found"),
 
+    // Blog errors
+    BLOG_CATEGORY_ALREADY_EXISTS(HttpStatus.CONFLICT, "Blog category already exists"),
+    BLOG_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "Blog category not found"),
+    BLOG_NOT_FOUND(HttpStatus.NOT_FOUND, "Blog not found"),
+
     // Generic errors
     UNCATEGORIZED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "Uncategorized exception");
 

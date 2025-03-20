@@ -18,6 +18,7 @@ import java.util.List;
  */
 @Data
 @Entity
+@Table(name = "treatment")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -55,7 +56,7 @@ public class Treatment {
     @Builder.Default
     private List<ServiceEntity> services = new ArrayList<>();
 
-    @OneToOne(mappedBy = "treatment", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "treatment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private TreatmentResult result;
 
     /**

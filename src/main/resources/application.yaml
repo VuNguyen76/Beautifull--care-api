@@ -4,25 +4,28 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:mysql://localhost:3306/skincarebeauti
+    url: jdbc:mysql://localhost:3306?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-        jakarta:
-          persistence:
-            schema-generation:
-              create-source: metadata
-              scripts:
-                action: create
-                create-target: create.sql
         globally_quoted_identifiers: true
+        globally_quoted_identifiers_skip_column_definitions: true
+        physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     database-platform: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: embedded
+      platform: mysql
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      continue-on-error: false
 
 jwt:
   signerKey: "LGeKsGSd24VeML6rG6EiNGDDBUBDpzR5pkXdT/piWaXmEh8qrvsihcqnmm/NW9ou"

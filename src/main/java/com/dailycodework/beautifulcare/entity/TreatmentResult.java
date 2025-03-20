@@ -17,6 +17,7 @@ import java.util.List;
  */
 @Data
 @Entity
+@Table(name = "treatment_result")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,13 +38,13 @@ public class TreatmentResult {
     private String recommendations;
 
     @ElementCollection
-    @CollectionTable(name = "treatment_result_images", joinColumns = @JoinColumn(name = "result_id"))
+    @CollectionTable(name = "treatment_result_images", joinColumns = @JoinColumn(name = "result_id"), foreignKey = @ForeignKey(name = "FK_TREATMENT_RESULT_IMAGES"))
     @Column(name = "image_url")
     @Builder.Default
     private List<String> imageUrls = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "treatment_product_recommendations", joinColumns = @JoinColumn(name = "result_id"))
+    @CollectionTable(name = "treatment_product_recommendations", joinColumns = @JoinColumn(name = "result_id"), foreignKey = @ForeignKey(name = "FK_TREATMENT_PRODUCT_RECOMMENDATIONS"))
     @Column(name = "product_recommendation")
     @Builder.Default
     private List<String> productRecommendations = new ArrayList<>();

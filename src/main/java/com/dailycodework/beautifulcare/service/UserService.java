@@ -4,6 +4,7 @@ import com.dailycodework.beautifulcare.dto.request.UserCreateRequest;
 import com.dailycodework.beautifulcare.dto.request.UserUpdateRequest;
 import com.dailycodework.beautifulcare.dto.response.UserResponse;
 import com.dailycodework.beautifulcare.entity.User;
+import com.dailycodework.beautifulcare.entity.UserRole;
 import com.dailycodework.beautifulcare.exception.AppException;
 import com.dailycodework.beautifulcare.exception.ErrorCode;
 import com.dailycodework.beautifulcare.mapper.UserMapper;
@@ -36,6 +37,7 @@ public class UserService {
         User newUser = userMapper.toUser(request);
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setActive(true);
+        newUser.setRole(UserRole.CUSTOMER);
 
         User savedUser = userRepository.save(newUser);
         return userMapper.toUserResponse(savedUser);
