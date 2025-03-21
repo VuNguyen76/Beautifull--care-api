@@ -94,8 +94,6 @@ public class BlogCategoryServiceImpl implements BlogCategoryService {
                 .orElseThrow(() -> new AppException(ErrorCode.BLOG_CATEGORY_NOT_FOUND,
                         "Blog category not found with ID: " + id));
 
-        // Check if there are blogs in this category
-        if (!category.getBlogs().isEmpty()) {
             throw new AppException(ErrorCode.BLOG_CATEGORY_HAS_BLOGS,
                     "Cannot delete category because it has associated blogs. Please remove or reassign these blogs first.");
         }
