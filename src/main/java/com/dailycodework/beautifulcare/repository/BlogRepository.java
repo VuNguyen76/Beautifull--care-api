@@ -14,8 +14,6 @@ import java.util.Optional;
 public interface BlogRepository extends JpaRepository<Blog, String> {
     List<Blog> findByCategory(BlogCategory category);
 
-    long countByCategory(BlogCategory category);
-
     List<Blog> findByAuthor(User author);
 
     List<Blog> findByPublishedTrue();
